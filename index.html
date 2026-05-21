@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Cognitive Assessment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="app-container">
+
+        <div id="screen-intro" class="screen visible">
+            <div class="subtitle">Full Battery Test</div>
+            <h2>Cognitive Assessment</h2>
+            <p>This sequence will test multiple domains: Word Encoding, Spatial Visual Memory, Sustained Attention, Object Naming, Abstract Reasoning, and Delayed Recall.</p>
+            <p>Ensure you are in a quiet environment and ready to focus.</p>
+            <button onclick="startPhase('memory-encode')">Begin Assessment</button>
+        </div>
+
+        <div id="screen-memory-encode" class="screen">
+            <div class="subtitle">Phase 1 of 6</div>
+            <h2>Memory Encoding</h2>
+            <p>Memorize these 5 words. You will be asked to type them at the very end of the test.</p>
+            <div class="word-grid" id="word-grid-container"></div>
+            
+            <div class="timer-text" id="encode-timer">12</div>
+            <p style="font-size: 14px; margin-top: 10px;">seconds remaining</p>
+            <button onclick="skipEncoding()">I have them memorized</button>
+        </div>
+
+        <div id="screen-visual-memory" class="screen">
+            <div class="subtitle">Phase 2 of 6</div>
+            <h2>Visual Memory</h2>
+            <p>Memorize the illuminated tiles and click them.</p>
+            
+            <div id="vm-header">
+                <div>Level: <span id="vm-level-display">1</span></div>
+                <div>Lives: <span id="vm-lives-display">🤍🤍🤍</span></div>
+            </div>
+            
+            <div id="game-board"></div>
+            <h3 id="vm-transition-msg" style="display: none; color: var(--warning); margin-top: 20px;">Pattern Failed. Calculating next stage...</h3>
+        </div>
+
+        <div id="screen-attention" class="screen">
+            <div class="subtitle">Phase 3 of 6</div>
+            <h2>Sustained Attention</h2>
+            <p>Tap the "TARGET" button <strong>ONLY</strong> when the letter <strong>A</strong> appears.</p>
+            <div class="attention-letter" id="att-letter">-</div>
+            <button id="target-btn">TARGET (A)</button>
+        </div>
+
+        <div id="screen-naming" class="screen">
+            <div class="subtitle">Phase 4 of 6</div>
+            <h2>Object Naming</h2>
+            <p>Identify the animal shown below.</p>
+            <div class="emoji-display" id="naming-emoji">❓</div>
+            <input type="text" id="naming-input" placeholder="Type animal name..." autocomplete="off">
+            <button onclick="submitNaming()">Next</button>
+            <p style="margin-top: 15px; font-weight: bold;">Item <span id="naming-progress">1</span> of 3</p>
+        </div>
+
+        <div id="screen-abstraction" class="screen">
+            <div class="subtitle">Phase 5 of 6</div>
+            <h2>Abstract Reasoning</h2>
+            <p>Identify the conceptual link between the two items.</p>
+            <h3 id="abs-question">Loading...</h3>
+            <div class="options-grid" id="abs-options"></div>
+        </div>
+
+        <div id="screen-recall" class="screen">
+            <div class="subtitle">Phase 6 of 6</div>
+            <h2>Delayed Recall</h2>
+            <p>Type the 5 words you memorized at the beginning (order doesn't matter).</p>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <input type="text" id="recall-0" placeholder="Word 1" autocomplete="off">
+                <input type="text" id="recall-1" placeholder="Word 2" autocomplete="off">
+                <input type="text" id="recall-2" placeholder="Word 3" autocomplete="off">
+                <input type="text" id="recall-3" placeholder="Word 4" autocomplete="off">
+                <input type="text" id="recall-4" placeholder="Word 5" autocomplete="off">
+            </div>
+            <button onclick="finishAssessment()">Submit & View Results</button>
+        </div>
+
+        <div id="screen-results" class="screen">
+            <div class="subtitle" style="color: var(--success);">Assessment Complete</div>
+            <h2>Final Report</h2>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-title">Delayed Recall</div>
+                    <div class="result-score" id="res-recall">0/5</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Visual Memory Level</div>
+                    <div class="result-score" id="res-visual" style="color: var(--primary);">Lvl 1</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Attention Correct</div>
+                    <div class="result-score" id="res-att-corr">0/11</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Attention False Alarms</div>
+                    <div class="result-score" id="res-att-false" style="color: var(--warning);">0</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Naming</div>
+                    <div class="result-score" id="res-naming">0/3</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Abstraction</div>
+                    <div class="result-score" id="res-abstraction">0/1</div>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" style="margin-top: 40px;">Restart Assessment</button>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
