@@ -104,9 +104,6 @@ function initializeRandomTest() {
 /* ===================== GLOBAL STATE & NAVIGATION ===================== */
 let scores = {
     visualLevel: 1,
-    attentionHits: 0,
-    attentionTotal: 11,
-    attentionFalseAlarms: 0,
     naming: 0,
     abstraction: 0,
     recall: 0
@@ -123,7 +120,6 @@ function startPhase(phase) {
         startMemoryEncoding();
     }
     if (phase === 'visual-memory') startVisualMemory();
-    if (phase === 'attention') startAttention();
     if (phase === 'naming') startNaming();
     if (phase === 'abstraction') startAbstraction();
     if (phase === 'recall') startRecall();
@@ -257,66 +253,15 @@ function handleTileClick(index, tileElement) {
             } else {
                 scores.visualLevel = vmLevel; // Save score
                 document.getElementById('vm-transition-msg').style.display = 'block';
-                setTimeout(() => startPhase('attention'), 2000); // Move to next phase
+                // Transition directly to naming now
+                setTimeout(() => startPhase('naming'), 2000); 
             }
         }, 1500);
     }
 }
 
 
-/* ===================== PHASE 3: ATTENTION ===================== */
-const attSequence = ['F','B','A','C','M','N','A','A','J','K','L','B','A','F','A','K','D','E','A','A','A','J','A','M','O','F','A','A','B'];
-let attInterval;
-let attIndex = 0;
-let attCurrentTarget = '';
-
-function startAttention() {
-    switchScreen('screen-attention');
-    const letterDisplay = document.getElementById('att-letter');
-    const targetBtn = document.getElementById('target-btn');
-    
-    attIndex = 0;
-    scores.attentionHits = 0;
-    scores.attentionFalseAlarms = 0;
-
-    targetBtn.onclick = () => {
-        if (attCurrentTarget === 'A') {
-            scores.attentionHits++;
-            attCurrentTarget = ''; 
-            targetBtn.style.backgroundColor = "var(--success)";
-            targetBtn.style.color = "white";
-            setTimeout(() => {
-                targetBtn.style.backgroundColor = "var(--warning)";
-                targetBtn.style.color = "black";
-            }, 150);
-        } else if (attCurrentTarget !== '' && attCurrentTarget !== '-') {
-            scores.attentionFalseAlarms++;
-            targetBtn.style.backgroundColor = "var(--danger)";
-            targetBtn.style.color = "white";
-            setTimeout(() => {
-                targetBtn.style.backgroundColor = "var(--warning)";
-                targetBtn.style.color = "black";
-            }, 150);
-        }
-    };
-
-    attInterval = setInterval(() => {
-        if (attIndex >= attSequence.length) {
-            clearInterval(attInterval);
-            startPhase('naming');
-            return;
-        }
-        
-        attCurrentTarget = attSequence[attIndex];
-        letterDisplay.innerText = attCurrentTarget;
-        attIndex++;
-        
-        setTimeout(() => { letterDisplay.innerText = ''; }, 750);
-    }, 1000);
-}
-
-
-/* ===================== PHASE 4: NAMING ===================== */
+/* ===================== PHASE 3: NAMING ===================== */
 let namingIndex = 0;
 
 function startNaming() {
@@ -355,7 +300,7 @@ function submitNaming() {
 }
 
 
-/* ===================== PHASE 5: ABSTRACTION ===================== */
+/* ===================== PHASE 4: ABSTRACTION ===================== */
 function startAbstraction() {
     switchScreen('screen-abstraction');
     // Note: The HTML and answers were already injected by initializeRandomTest()
@@ -367,7 +312,7 @@ function submitAbstraction(points) {
 }
 
 
-/* ===================== PHASE 6: DELAYED RECALL ===================== */
+/* ===================== PHASE 5: DELAYED RECALL ===================== */
 function startRecall() {
     switchScreen('screen-recall');
     setTimeout(() => document.getElementById('recall-0').focus(), 100);
@@ -401,15 +346,6 @@ function showResults() {
     
     document.getElementById('res-recall').innerText = `${scores.recall} / 5`;
     document.getElementById('res-visual').innerText = `Level ${scores.visualLevel}`;
-    document.getElementById('res-att-corr').innerText = `${scores.attentionHits} / ${scores.attentionTotal}`;
-    document.getElementById('res-att-false').innerText = `${scores.attentionFalseAlarms}`;
     document.getElementById('res-naming').innerText = `${scores.naming} / 3`;
     document.getElementById('res-abstraction').innerText = `${scores.abstraction} / 1`;
-
-    const faElem = document.getElementById('res-att-false');
-    if (scores.attentionFalseAlarms === 0) {
-        faElem.style.color = "var(--success)";
-    } else if (scores.attentionFalseAlarms > 2) {
-        faElem.style.color = "var(--danger)";
-    }
 }
