@@ -110,11 +110,6 @@ input[type="text"]:focus { outline: none; border-color: var(--primary); }
     40%, 60% { transform: translate3d(6px, 0, 0); }
 }
 
-/* Attention */
-.attention-letter { font-size: 100px; font-weight: bold; color: var(--primary); margin: 30px 0; height: 120px; display: flex; align-items: center; justify-content: center; text-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-#target-btn { background-color: var(--warning); font-size: 24px; padding: 20px 50px; border-radius: 50px; color: #000; }
-#target-btn:hover { background-color: #fbbf24; }
-
 /* Naming */
 .emoji-display { font-size: 120px; margin: 20px 0; animation: float 3s ease-in-out infinite; }
 @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
